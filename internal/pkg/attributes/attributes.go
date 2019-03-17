@@ -44,10 +44,6 @@ type Instance struct {
 	types.Instance
 }
 
-func (instance *Instance) Attribute() uuid.UUID  {
-	return instance.attribute.UUID()
-}
-
 func (instance *Instance) UUID() uuid.UUID {
 	if instance.uuid == uuid.Nil {
 		instance.uuid = uuid.New()
@@ -103,7 +99,7 @@ func (manager *Manager) AddAttribute(attribute *Attribute) {
 // TODO: Speed can be improved via hash map
 func (manager *Manager) AddInstance(instance *Instance) {
 	for _, attributeUUID := range manager.Types() {
-		if attributeUUID == instance.Attribute() {
+		if attributeUUID == instance.attribute.UUID() {
 			manager.instances = append(manager.instances, instance)
 		}
 	}
