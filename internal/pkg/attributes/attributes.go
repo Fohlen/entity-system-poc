@@ -2,7 +2,6 @@ package attributes
 
 import (
 	"github.com/fohlen/entity-system/internal/pkg/types"
-	"github.com/google/uuid"
 	"reflect"
 )
 
@@ -38,28 +37,14 @@ func NewInstance(attribute *Attribute, value interface{}) Instance {
 
 // Implements a singleton based manager
 type Manager struct {
-	attributes []*Attribute
+	types []*Attribute
 	instances []*Instance
-}
-func (manager *Manager) Types() []uuid.UUID {
-	var uuidList = make([]uuid.UUID, len(manager.attributes))
-	for i, a := range manager.attributes {
-		uuidList[i] = a.UUID()
-	}
-	return uuidList
-}
-
-func (manager *Manager) Instances()  []uuid.UUID {
-	var uuidList = make([]uuid.UUID, len(manager.instances))
-	for i, instance := range manager.instances {
-		uuidList[i] = instance.UUID()
-	}
-	return uuidList
+	types.ManagerImpl
 }
 
 // TODO: This could be made variadic
 func (manager *Manager) AddAttribute(attribute *Attribute) {
-	manager.attributes = append(manager.attributes, attribute)
+	manager.types = append(manager.types, attribute)
 }
 
 // TODO: This could be made variadic
