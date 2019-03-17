@@ -8,7 +8,6 @@ import (
 )
 
 type Entity struct {
-	uuid uuid.UUID
 	attributes []*attributes.Attribute
 	types.UUIDBase
 }
@@ -19,7 +18,6 @@ func NewEntity(attributes ...*attributes.Attribute) Entity {
 }
 
 type Instance struct {
-	uuid uuid.UUID
 	entity *Entity
 	types.UUIDBase
 }
