@@ -4,7 +4,6 @@ import (
 	"github.com/fohlen/entity-system/internal/pkg/attributes"
 	"github.com/fohlen/entity-system/internal/pkg/types"
 	"github.com/google/uuid"
-	"sync"
 )
 
 type Entity struct {
@@ -60,15 +59,4 @@ func (manager *Manager) AddInstance(instance *Instance) {
 			manager.instances = append(manager.instances, instance)
 		}
 	}
-}
-
-// Singleton pattern
-var manager *Manager
-var once sync.Once
-
-func GetEntityInstanceManager() *Manager {
-	once.Do(func() {
-		manager = &Manager{}
-	})
-	return manager
 }

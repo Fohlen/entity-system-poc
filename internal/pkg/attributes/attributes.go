@@ -5,7 +5,6 @@ import (
 	"github.com/fohlen/entity-system/internal/pkg/types"
 	"github.com/google/uuid"
 	"reflect"
-	"sync"
 )
 
 // An attribute has a name and a type
@@ -89,15 +88,3 @@ func (manager *Manager) AddInstance(instance *Instance) {
 		}
 	}
 }
-
-// Singleton pattern
-var manager *Manager
-var once sync.Once
-
-func GetManager() *Manager {
-	once.Do(func() {
-		manager = &Manager{}
-	})
-	return manager
-}
-
