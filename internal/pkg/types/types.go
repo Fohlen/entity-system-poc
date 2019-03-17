@@ -22,6 +22,6 @@ type Instance interface {
 }
 
 type Manager interface {
-	Types() []Type
-	Instances() []Instance
+	Types() []uuid.UUID
+	Instances() []uuid.UUID
 }

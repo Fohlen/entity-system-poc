@@ -39,9 +39,13 @@ func NewAttribute(name string, attributeType reflect.Kind) Attribute {
 // An instance is of type attribute and has a value
 type Instance struct {
 	value interface{}
-	attribute Attribute
+	attribute *Attribute
 	uuid uuid.UUID
 	types.Instance
+}
+
+func (instance *Instance) Attribute() uuid.UUID  {
+	return instance.attribute.UUID()
 }
 
 func (instance *Instance) UUID() uuid.UUID {
@@ -63,15 +67,46 @@ func (instance *Instance) Value() interface{} {
 	return instance.value
 }
 
-func NewInstance(attribute Attribute, value interface{}) Instance {
+func NewInstance(attribute *Attribute, value interface{}) Instance {
 	var instance = Instance{ attribute: attribute }
 	instance.SetValue(value)
 	return instance
 }
 
+// Implements a singleton based manager
 type Manager struct {
-	attributes []Attribute
-	instances []Instance
+	attributes []*Attribute
+	instances []*Instance
+}
+func (manager *Manager) Types() []uuid.UUID {
+	var uuidList = make([]uuid.UUID, len(manager.attributes))
+	for i, a := range manager.attributes {
+		uuidList[i] = a.UUID()
+	}
+	return uuidList
+}
+
+func (manager *Manager) Instances()  []uuid.UUID {
+	var uuidList = make([]uuid.UUID, len(manager.instances))
+	for i, instance := range manager.instances {
+		uuidList[i] = instance.UUID()
+	}
+	return uuidList
+}
+
+// TODO: This could be made variadic
+func (manager *Manager) AddAttribute(attribute *Attribute) {
+	manager.attributes = append(manager.attributes, attribute)
+}
+
+// TODO: This could be made variadic
+// TODO: Speed can be improved via hash map
+func (manager *Manager) AddInstance(instance *Instance) {
+	for _, attributeUUID := range manager.Types() {
+		if attributeUUID == instance.Attribute() {
+			manager.instances = append(manager.instances, instance)
+		}
+	}
 }
 
 // Singleton pattern
