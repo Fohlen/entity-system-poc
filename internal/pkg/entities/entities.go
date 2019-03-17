@@ -27,7 +27,7 @@ func NewEntity(attributes ...*attributes.Attribute) Entity {
 
 type Instance struct {
 	uuid uuid.UUID
-	entity Entity
+	entity *Entity
 	types.UUIDBase
 }
 
@@ -36,6 +36,10 @@ func (instance *Instance) UUID() uuid.UUID {
 		instance.uuid = uuid.New()
 	}
 	return instance.uuid
+}
+
+func NewInstance(entity *Entity) Instance {
+	return Instance{entity: entity}
 }
 
 type Manager struct {
