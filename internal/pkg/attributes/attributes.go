@@ -1,7 +1,6 @@
 package attributes
 
 import (
-	"errors"
 	"github.com/fohlen/entity-system/internal/pkg/types"
 	"github.com/google/uuid"
 	"reflect"
@@ -9,46 +8,30 @@ import (
 
 // An attribute has a name and a type
 type Attribute struct {
-	attributeType reflect.Kind
-	name string
-	types.Type
+	types.TypeImpl
 	types.UUIDBase
+	name string
 }
 
-func (attribute *Attribute) ValueType() reflect.Kind {
-	return attribute.attributeType
-}
-
+// TODO: Refactor with injector
 func NewAttribute(name string, attributeType reflect.Kind) Attribute {
-	var attribute = Attribute{
-		name: name,
-		attributeType: attributeType,
-	}
+	attribute := Attribute{}
+	attribute.name = name
+	attribute.SetValueType(attributeType)
 	return attribute
 }
 
 // An instance is of type attribute and has a value
 type Instance struct {
-	value interface{}
-	attribute *Attribute
-	types.Instance
+	types.InstanceImpl
 	types.UUIDBase
+	instanceType Attribute
 }
 
-// Set the value of an instance
-func (instance *Instance) SetValue(i interface{}) {
-	if reflect.ValueOf(i).Kind() != instance.attribute.attributeType {
-		panic(errors.New("invalid type used"))
-	}
-	instance.value = i
-}
-
-func (instance *Instance) Value() interface{} {
-	return instance.value
-}
-
+// TODO: Refactor with injector
 func NewInstance(attribute *Attribute, value interface{}) Instance {
-	var instance = Instance{ attribute: attribute }
+	instance := Instance{}
+	instance.SetInstanceType(attribute.TypeImpl)
 	instance.SetValue(value)
 	return instance
 }
@@ -83,7 +66,7 @@ func (manager *Manager) AddAttribute(attribute *Attribute) {
 // TODO: Speed can be improved via hash map
 func (manager *Manager) AddInstance(instance *Instance) {
 	for _, attributeUUID := range manager.Types() {
-		if attributeUUID == instance.attribute.UUID() {
+		if attributeUUID == instance.UUID() {
 			manager.instances = append(manager.instances, instance)
 		}
 	}
