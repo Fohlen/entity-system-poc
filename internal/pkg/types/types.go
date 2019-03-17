@@ -1,53 +1,69 @@
 package types
 
 import (
-	"sync"
-	"github.com/fohlen/entity-system/internal/pkg/container"
 	"github.com/google/uuid"
+	"sync"
+)
+
+type DataType int
+
+const (
+	BOOL DataType = iota
+	INT DataType = iota
+	STRING DataType = iota
 )
 
 type Type struct {
-	uuid uuid.UUID
-	container container.Container
+	UUID uuid.UUID
+	ValueType DataType
 }
 
-type TypeInstance struct {
-	uuid.UUID
+type Instance struct {
+	UUID uuid.UUID
+	InstanceType Type
+	Value interface{}
+}
+
+type Manager struct {
 	types []Type
+	instances []Instance
 }
 
-func (instance *TypeInstance) AddTypeInstance(t Type) {
-	instance.types = append(instance.types, t)
-}
-
-func (instance *TypeInstance) ListTypeInstances() []uuid.UUID {
-	UUIDList := make([]uuid.UUID, len(instance.types))
-	for i, t := range instance.types {
-		UUIDList[i] = t.uuid
-	}
-	return UUIDList
-}
-
-func (instance *TypeInstance) DeleteTypeInstance(uuid uuid.UUID) {
-	for i, _ := range instance.types {
-		if instance.types[i].uuid == uuid {
-			instance.types = append(instance.types[:i], instance.types[i+1:]...)
-			break
-		}
+func (manager *Manager) AddType(types ...Type) {
+	for _, t := range types {
+		manager.types = append(manager.types, t)
 	}
 }
 
-type TypeInstanceManager struct {
-	instance TypeInstance
+func (manager *Manager) ListTypes() []uuid.UUID {
+	var uuidList = make([]uuid.UUID, len(manager.types))
+	for i, t := range manager.types {
+		uuidList[i] = t.UUID
+	}
+	return uuidList
+}
+
+func (manager *Manager) AddInstance(instances ...Instance) {
+	for _, i := range instances {
+		manager.instances = append(manager.instances, i)
+	}
+}
+
+func (manager *Manager) ListInstances() []uuid.UUID {
+	var uuidList = make([]uuid.UUID, len(manager.types))
+	for i, instance := range manager.instances {
+		uuidList[i] = instance.UUID
+	}
+	return uuidList
 }
 
 // Singleton pattern
-var manager *TypeInstanceManager
+var manager *Manager
 var once sync.Once
 
-func GetTypeInstanceManager() *TypeInstanceManager {
+func GetManager() *Manager {
 	once.Do(func() {
-		manager = &TypeInstanceManager{}
+		manager = &Manager{}
 	})
 	return manager
 }
