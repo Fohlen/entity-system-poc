@@ -10,10 +10,8 @@ import (
 
 // An attribute has a name and a type
 type Attribute struct {
-	uuid uuid.UUID
 	attributeType reflect.Kind
 	name string
-	Name string
 	types.Type
 	types.UUIDBase
 }
@@ -34,7 +32,6 @@ func NewAttribute(name string, attributeType reflect.Kind) Attribute {
 type Instance struct {
 	value interface{}
 	attribute *Attribute
-	uuid uuid.UUID
 	types.Instance
 	types.UUIDBase
 }

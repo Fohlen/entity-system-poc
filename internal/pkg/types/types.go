@@ -23,6 +23,7 @@ type Type interface {
 type Instance interface {
 	InstanceType() Type
 	Value() interface{}
+	SetValue(value interface{})
 }
 
 type Manager interface {
