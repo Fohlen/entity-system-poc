@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/fohlen/entity-system/internal/pkg/attributes"
 	"github.com/fohlen/entity-system/internal/pkg/entities"
+	"github.com/fohlen/entity-system/pkg/visual-scripting"
 	"reflect"
 	"time"
 )
@@ -20,6 +21,7 @@ func NewEntitySystem() EntitySystem {
 func (entitySystem *EntitySystem) Init() {
 	var attribute = attributes.NewAttribute("abc", reflect.String)
 	var instance = attributes.NewInstance(&attribute, "abc")
+	var instance2 = attributes.NewInstance(&attribute, "abcd")
 	entitySystem.AttributeManager.AddAttribute(&attribute)
 	entitySystem.AttributeManager.AddInstance(&instance)
 
@@ -37,6 +39,9 @@ func (entitySystem *EntitySystem) Init() {
 	for _, instanceUUID := range entitySystem.EntityManager.Instances() {
 		fmt.Printf("Entity instance UUID: %v\n", instanceUUID)
 	}
+
+	var connector = visual_scripting.NewInputConnector(&instance, &instance2)
+	go connector.SetValueLeft("de") // concurrently updates both values
 }
 
 func (entitySystem *EntitySystem) Run() {
