@@ -15,13 +15,7 @@ type Attribute struct {
 	name string
 	Name string
 	types.Type
-}
-
-func (attribute *Attribute) UUID() uuid.UUID {
-	if attribute.uuid == uuid.Nil {
-		attribute.uuid = uuid.New()
-	}
-	return attribute.uuid
+	types.UUIDBase
 }
 
 func (attribute *Attribute) ValueType() reflect.Kind {
@@ -42,13 +36,7 @@ type Instance struct {
 	attribute *Attribute
 	uuid uuid.UUID
 	types.Instance
-}
-
-func (instance *Instance) UUID() uuid.UUID {
-	if instance.uuid == uuid.Nil {
-		instance.uuid = uuid.New()
-	}
-	return instance.uuid
+	types.UUIDBase
 }
 
 // Set the value of an instance

@@ -13,13 +13,6 @@ type Entity struct {
 	types.UUIDBase
 }
 
-func (entity *Entity) UUID() uuid.UUID {
-	if entity.uuid == uuid.Nil {
-		entity.uuid = uuid.New()
-	}
-	return entity.uuid
-}
-
 // Return a new entity type
 func NewEntity(attributes ...*attributes.Attribute) Entity {
 	return Entity{ attributes: attributes }
@@ -29,13 +22,6 @@ type Instance struct {
 	uuid uuid.UUID
 	entity *Entity
 	types.UUIDBase
-}
-
-func (instance *Instance) UUID() uuid.UUID {
-	if instance.uuid == uuid.Nil {
-		instance.uuid = uuid.New()
-	}
-	return instance.uuid
 }
 
 func NewInstance(entity *Entity) Instance {
