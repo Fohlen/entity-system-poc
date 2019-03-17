@@ -30,7 +30,7 @@ type Instance struct {
 // TODO: Refactor with injector
 func NewInstance(attribute *Attribute, value interface{}) Instance {
 	instance := Instance{}
-	instance.SetInstanceType(attribute.TypeImpl)
+	instance.SetInstanceType(&attribute.TypeImpl)
 	instance.SetValue(value)
 	return instance
 }

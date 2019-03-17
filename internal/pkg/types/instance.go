@@ -13,15 +13,15 @@ type InstanceImpl struct {
 	UUIDBase
 	Instance
 	value interface{}
-	instanceType TypeImpl
+	instanceType *TypeImpl
 }
 
 // Getter for the instance type
 func (instance *InstanceImpl) InstanceType() Type {
-	return &instance.instanceType
+	return instance.instanceType
 }
 
-func (instance *InstanceImpl) SetInstanceType(t TypeImpl) {
+func (instance *InstanceImpl) SetInstanceType(t *TypeImpl) {
 	instance.instanceType = t
 }
 

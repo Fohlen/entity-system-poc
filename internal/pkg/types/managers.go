@@ -11,8 +11,8 @@ type Manager interface {
 
 type ManagerImpl struct {
 	Manager
-	types []TypeImpl
-	instances []InstanceImpl
+	types []*TypeImpl
+	instances []*InstanceImpl
 }
 
 func (manager *ManagerImpl) Types() []uuid.UUID {
